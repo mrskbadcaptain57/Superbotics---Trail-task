@@ -1,0 +1,27 @@
+[
+    {
+        "district_name":"Virudhunagar",
+        "city_info":[
+            {
+                "city_name":"Virudhunagar",
+                "pincode":626001
+            },
+            {
+                "city_name":"Sivakasi",
+                "pincode":626123
+            },
+            {
+                "city_name":"Aruppukottai",
+                "pincode":626101
+            },
+            {
+                "city_name":"Sattur",
+                "pincode":626203
+            },
+            {
+                "city_name":"Srivilliputhur",
+                "pincode":626125
+            }
+        ]
+    }
+]

@@ -1,0 +1,39 @@
+            <!-- Login UI  -->
+<div class="login_head">
+    <div class="container centre_content" style="text-align: center;">
+        <div class="white_shadow">
+            <div class="tit_txt"> ONLINE FOOD DELIVERY </div>
+            <div class="spr_botic"> SUPERBOTICS </div>
+            <div class="sign_in">
+                <div data-toggle="modal" data-target="#signin" class="signin_btn">Sign In</div>
+            </div>
+        </div>
+    </div>
+</div>
+                            <!-- Login popup -->
+<div class="modal" id="signin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" style="background: rgba(17, 111, 192, 0.3); backdrop-filter: blur(2px);min-width: 80%;">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="margin-left: 0%;">
+        <div class="modal-content" style="text-align: justify;position: fixed;overflow: auto;max-height: 70%;width: 30%;background-color: #FFFFFF;margin-left:32% ;">
+            <div>
+                <div>
+                    <div class="register_flow">
+                        <div class="register_emailflow">
+                            <div class="register_text">Login Now!</div>
+                            <div class="email_address">User Name <span style="color:#FA5656;font-size: 15px;">*</span> </div>
+                            <input type="text" required placeholder="Enter user name" tabindex="1" id="user_name" name="user_name" class="email_input" [(ngModel)]=user_name />
+
+                            <div class="email_address">Password <span style="color:#FA5656;font-size: 15px;">*</span> </div>
+                            <div class="code_inbox" style="margin-bottom: 15px">
+                                <input type="{{type}}" tabindex="1" class="code_input" placeholder="Enter your password" [(ngModel)]=user_password>
+                                <img [src]="showeyeIcon?'../../assets/images/eye.svg':'../../assets/images/eyeclose.svg'" class="eye_img" (click)="hideShow()" />
+                            </div>
+                            <div class="next_light d-flex">
+                                <div [ngClass]="loginButton()?'nextdark_text':'nextlight_text'" (click)="loginUser()">Login</div>
+                            </div>
+                        </div>
+                    </div>          
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

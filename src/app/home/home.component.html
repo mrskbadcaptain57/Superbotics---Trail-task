@@ -1,0 +1,204 @@
+<div class="home_head">
+    <div class="container home_cont">
+                    <!-- Cart icon  -->
+        <div class="cart_icon">
+                                    <!-- User name and icon  -->
+            <div *ngIf="show_screen=='orders'">
+                <div class="icon_name">{{pro_name}}</div>
+            </div>
+            <div *ngIf="show_screen!='orders'" style="padding-top: 5px;cursor: pointer;" [popover]="userTouch" [popoverOnHover]="false" [popoverDismissTimeout]="2000" popoverPlacement="bottom-left" [popoverCloseOnMouseOutside]="true" [popoverAnimation]="true" >
+                <img style="width:30px;padding-right: 5px;" src="../assets/images/user_icon.png">
+                <span class="pop_city">{{uname}}</span>
+                <popover-content #userTouch [closeOnClickOutside]="true">
+                    <div style="padding: 0px 10px;width:100px">
+                        <div class="register_text" (click)="showMyOrders()">My Orders</div>
+                        <div style="padding-top: 5px;" class="register_text" (click)="logout()"><img style="padding-right: 5px;" src="../assets/images/logouter_icon.svg">Logout</div>
+                    </div>
+                </popover-content>
+            </div>
+                                <!-- Cart icon -->
+            <div style="padding-top: 20px;" *ngIf="show_screen!='cart'">
+                <img style="width:40px;cursor: pointer;" src="../assets/images/shopping-cart.png" (click)="showCart()">
+                <span class="cart_qnt">{{cart_items.length}}</span>
+            </div>
+        </div>
+                            <!-- Home screen  -->
+        <div *ngIf="show_screen=='home'" style="width:100%">
+            <div>
+                <span class="prem_txt">Premium</span>
+                <span class="qlty_txt">quality</span>
+            </div>
+            <div>
+                <span class="prem_txt">Food for your</span>
+                <img src="../assets/images/banana_icon.svg" style="padding-right: 20px;">
+                <span class="qlty_txt">healthy</span> 
+            </div>
+            <div>
+                <img src="../assets/images/apple_icon.svg" style="padding-right: 20px;">
+                <span class="qlty_txt">& Daily Life</span> 
+            </div>
+            <div class="pop_city">Popular Restaurants in Virudhunagar</div>
+            <div style="padding-top: 10px;display: flex;width:100%">
+                <div style="float:left;width:100%">
+                    <div class="sort_by">Sort By : </div>
+                    <div style="float:left" [ngClass]="selectedSort=='A to Z'?'res_act':'res_inact'" (click)="changeSort('A to Z')">A to Z</div>
+                    <div style="float:left" [ngClass]="selectedSort=='Z to A'?'res_act':'res_inact'" (click)="changeSort('Z to A')">Z to A</div>
+                    <div style="float:left" [ngClass]="selectedSort=='star_rating'?'res_act':'res_inact'" (click)="changeSort('star_rating')">Star Ratings</div>
+                </div>
+            </div>
+            <div class="row" style="padding-top: 30px;width:100%;height:55vh;overflow-y: auto;">
+                <div class="col-md grey_box" *ngFor="let res of restaurant_info;let i=index" (click)="openRestaurant(i)">
+                    <div style="padding-top: 10px;"><img style="width:200px" src="{{res.src}}"></div>
+                    <div style="padding-top: 10px;" class="food_txt">{{res.restaurant_name}}</div>
+                    <div style="width: 100%;">
+                        <div class="food_txt" style="float: left;">{{res.cuisine}}</div>
+                        <div style="float: right;">
+                            <img style="padding-right: 3px;" src="../assets/images/star_rating.svg" >
+                            <span style="vertical-align: middle;">{{res.star_rating}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                            <!-- Menu card screen  -->
+        <div *ngIf="show_screen=='menu'">
+            <div style="width: 100%;">
+                <div class="back_to" (click)="backToHome()"> Back to Restaurants </div>
+                <div style="padding-top: 10px;border-bottom: 3px solid #DEDEDE;border-bottom-style: dashed;">
+                    <div class="food_txt">{{selectedRestaurantName}}</div>
+                    <div class="food_txt">{{selectedRestaurantCuisine}}</div>
+                    <div class="food_txt" style="padding-bottom: 10px;">
+                        <img src="../assets/images/star_rating.svg" style="padding-right: 5px;width:30px;cursor: pointer;">
+                        <span style="vertical-align: middle;padding-top: 3px;">{{selectedRestaurantRating}}</span>
+                    </div>
+                </div>
+                <div style="padding-top: 10px;display: flex;width:100%">
+                    <div style="width:100%">
+                        <div style="float:left" [ngClass]="selectedMealType=='all'?'res_act':'res_inact'" (click)="showAllMealTypes('all')">All</div>
+                        <div style="float:left" *ngFor="let meal of meal_types;let i=index" [ngClass]="selectedMealType==meal?'res_act':'res_inact'" (click)="changeMealTypes(i)">{{meal}}</div>
+                    </div>
+                </div>
+                <div style="padding-top: 10px;height:55vh;overflow-y: auto;padding-right: 20px;">
+                    <div *ngFor="let menu of filterdMenu;let i=index;" style="width:100%;border-bottom: 2px solid #DEDEDE;padding:10px 5px;">
+                        <div [ngClass]="menu.meal_type==available_meal?'meal_act':'meal_inact'" style="display: flex;width:100%;">
+                            <div style="float:left;width:100%;vertical-align: middle;">
+                                <div>
+                                    <img style="width:40px" [src]="menu.food_type=='Veg'?'../assets/images/veg.png':'../assets/images/non_veg.png'">
+                                    <span *ngIf="menu.food_type=='Veg'" class="veg_green">Veg</span>
+                                    <span *ngIf="menu.food_type=='Non-Veg'" class="nonveg_red">Non-Veg</span>
+                                </div>
+                                <div class="food_txt">{{menu.food_name}}</div>
+                                <div class="food_txt">{{menu.food_cost | currency:'INR'}}</div>
+                                <div>
+                                    <input type="number" min="1" oninput="this.value = Math.abs(this.value)" [(ngModel)]="menu.quantity" (input)="changeQuantity($event,i,'home')" class="input_num">
+                                </div>
+                            </div>
+                            <div style="float:right;width:100%;">
+                                <div style="float: right;text-align: center;">
+                                    <div><img style="width:120px;padding-top: 10px;" src="{{menu.food_img}}"></div>
+                                    <div style="display: inline-block;width:100%;text-align: center;padding-top: 5px;">
+                                        <div class="add_cart" (click)="addItems(menu.meal_type,i)">Add</div>
+                                        <div class="time_txt"> <img style="width:20px" src="../assets/images/hand_del.svg"> {{menu.delivery_timing}} Mins</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                            <!-- Cart Screen  -->
+        <div *ngIf="show_screen=='cart'" style="width:100%;height:auto;">
+            <div>
+                <img (click)="backToMenu()" src="../assets/images/back_button.png" style="padding-right: 5px;width:30px;cursor: pointer;">
+                <Span class="food_txt" style="vertical-align: middle;">Cart Items</Span>
+            </div>
+            <div class="table-responsive" style="width:100%;padding-top: 20px;">
+                <table class="table">
+                    <tr *ngFor="let cart of cart_items;let i=index">
+                        <td>
+                            <img style="width:40px" [src]="cart.food_type=='Veg'?'../assets/images/veg.png':'../assets/images/non_veg.png'">
+                        </td>
+                        <td>{{cart.food_name}}</td>
+                        <td>
+                            <input type="number" min="1" oninput="this.value = Math.abs(this.value)" [(ngModel)]="cart.quantity" (input)="changeQuantity($event,i,'cart')" class="input_num">
+                        </td>
+                        <td>{{cart.food_cost | currency:'INR'}}</td>
+                        <td><img style="width:30px;cursor: pointer;" (click)="removeItem(cart.id)" src="../assets/images/trash-can.png"></td>
+                    </tr>
+                </table>
+            </div>
+            <div style="display: inline-block;padding: 20px;">
+                <div style="border-bottom: 2px solid #dedede;">Item Total :
+                    <span> {{item_cost | currency:'INR'}} </span>
+                </div>
+                <div style="padding-top: 10px;border-bottom: 2px solid #dedede;">Taxes and Service charges :
+                    <span> {{service_charges | currency:'INR'}} </span>
+                </div>
+                <div style="padding-top: 10px;">To pay :
+                    <span> {{total_cost | currency:'INR'}} </span>
+                </div>
+            </div>
+            <div style="display:inline-block;width:100%;padding-top: 20px;">
+                <div data-target="#address" data-toggle="modal" style="float: left;" class="add_cart"> Delivery Address </div>
+                <div style="float: right;"> 
+                    <div class="register_text">{{street_name}}</div>
+                    <div class="register_text">{{city_name}}</div>
+                    <div class="register_text">{{district_name}}</div>
+                    <div class="register_text">{{pincode}}</div>
+                    <div class="add_cart" (click)="ConfirmOrder()">Place Order</div>
+                </div>
+            </div>
+            
+        </div>
+                            <!-- My orders  -->
+        <div *ngIf="show_screen=='orders'" style="width:100%;height:auto;padding-top: 50px;">
+            <div>
+                <img (click)="backToHome()" src="../assets/images/back_button.png" style="padding-right: 5px;width:30px;cursor: pointer;">
+                <Span class="food_txt" style="vertical-align: middle;">My Orders</Span>
+            </div>
+            <div class="table-responsive" style="width:100%;padding-top: 20px;">
+                <table class="table">
+                    <tr *ngFor="let orders of my_orders;let i=index">
+                        <td>
+                            <img style="width:40px" [src]="orders.food_type=='Veg'?'../assets/images/veg.png':'../assets/images/non_veg.png'">
+                        </td>
+                        <td>{{orders.restaurant_name}}</td>
+                        <td>{{orders.food_name}}</td>
+                        <td>{{orders.quantity}}</td>
+                        <td>{{orders.date | date: 'dd/MM/yyyy'}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+                    <!-- Address Popup  -->
+<div class="modal" id="address" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" style="background: rgba(17, 111, 192, 0.3); backdrop-filter: blur(2px);min-width: 80%;">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="margin-left: 0%;">
+        <div class="modal-content" style="text-align: justify;position: fixed;overflow: auto;max-height: 70%;width: 30%;background-color: #FFFFFF;margin-left:32% ;">
+            <div class="register_flow">
+                <div class="register_emailflow">
+                    <div class="register_text">Please fill the address!</div>
+                    <div class="email_address"> District <span style="color:#FA5656;font-size: 15px;">*</span> </div>
+                    <select class="email_input" [(ngModel)]="district_name" (change)="changeDistrict()">
+                        <option>Select</option>
+                        <option *ngFor="let dist of district_info">{{dist.district_name}}</option>
+                    </select>
+                    <div class="email_address"> City <span style="color:#FA5656;font-size: 15px;">*</span> </div>
+                    <select class="email_input" [(ngModel)]="city_name" (change)="changeCity()">
+                        <option>Select</option>
+                        <option *ngFor="let city of city_info">{{city.city_name}}</option>
+                    </select>
+                    <div class="email_address"> Door No & Street Name <span style="color:#FA5656;font-size: 15px;">*</span> </div>
+                    <input type="text" required placeholder="Enter Street Name" [(ngModel)]="street_name" tabindex="1" class="email_input"/>
+                    <div class="email_address"> Pincode <span style="color:#FA5656;font-size: 15px;">*</span> </div>
+                    <input type="text" disabled placeholder="autofill" [(ngModel)]="pincode" tabindex="1" class="email_input"/>
+                    <div class="next_light d-flex">
+                        <div (click)="saveAddress()" [ngClass]="saveAddressButton()?'nextdark_text':'nextlight_text'">Save</div>
+                    </div>
+                </div>
+            </div>          
+        </div>
+    </div>
+</div> 
